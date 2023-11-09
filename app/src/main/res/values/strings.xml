@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">LocationGuardPro</string>
+    <string name="app_logo">Logo</string>
+    <string name="app_text_logo">TextLogo</string>
+    <string name="app_name_space">LocationGuard Pro</string>
+
 </resources>
