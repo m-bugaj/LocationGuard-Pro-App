@@ -45,4 +45,52 @@
         app:layout_constraintVertical_bias="0.135"
         tools:visibility="visible" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="154dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="36dp"
+        android:layout_marginBottom="400dp"
+        android:fontFamily="@font/jura_medium"
+        android:text="Stop tracking"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textIsSelectable="true"
+        android:textSize="12sp"
+        android:visibility="visible"
+        app:cornerRadius="19dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="154dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="105dp"
+        android:layout_marginEnd="221dp"
+        android:layout_marginBottom="401dp"
+        android:background="@drawable/custom_button"
+        android:fontFamily="@font/jura_medium"
+        android:text="Start tracking"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textIsSelectable="true"
+        android:textSize="12sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
