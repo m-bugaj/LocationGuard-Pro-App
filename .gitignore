@@ -13,18 +13,3 @@
 .externalNativeBuild
 .cxx
 local.properties
-
-# Ignoruj katalogi generowane przez Android Studio
-.idea/
-.gradle/
-build/
-
-# Ignoruj pliki konfiguracyjne Android Studio
-local.properties
-
-# Ignoruj pliki zapisywane na lokalnym komputerze u¿ytkownika
-.DS_Store
-desktop.ini
-thumbs.db
-
-# Dodaj w³asne elementy do ignorowania, jeœli jest to konieczne

@@ -1,7 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">LocationGuardPro</string>
-    <string name="app_logo">Logo</string>
-    <string name="app_text_logo">TextLogo</string>
-    <string name="app_name_space">LocationGuard Pro</string>
+	<!-- homescreen strings -->
 
+	<string name="app_name">Page 1</string>
+	<string name="ek_img_content">ExportKit Image</string>
+	<string name="locationguard_pro_string">LocationGuard Pro</string>
+	<string name="start_tracking_string">Start tracking</string>
+	<string name="reports_string">Reports</string>
+	<string name="stop_tracking_string">Stop tracking</string>
 </resources>

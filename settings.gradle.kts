@@ -13,5 +13,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "LocationGuardPro"
+rootProject.name = "LocationGuard"
 include(":app")
+ 
