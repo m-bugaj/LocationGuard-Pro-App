@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_color">#3A3C3D</color>
     <color name="start_tracking_color_bef">#B5D9A4</color>
+    <color name="stop_tracking_color_bef">#DB6868</color>
+    <color name="start_tracking_color_aft">#BBC0B8</color>
     <color name="stop_tracking_color_aft">#C79B9B</color>
+    <color name="reports_color">#FDE48C</color>
 </resources>
