@@ -13,4 +13,6 @@
     <color name="start_tracking_color_aft">#BBC0B8</color>
     <color name="stop_tracking_color_aft">#C79B9B</color>
     <color name="reports_color">#FDE48C</color>
+    <color name="qr_button_color">#3AB6C7</color>
+    <color name="map_button">#E0DFD9</color>
 </resources>
