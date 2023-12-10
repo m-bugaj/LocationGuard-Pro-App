@@ -99,11 +99,13 @@
         android:layout_height="200dp"
         android:background="@drawable/qr_button"
         android:padding="10dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65999997">
+        app:layout_constraintVertical_bias="0.65999997"
+        tools:visibility="visible">
 
         <ImageButton
             android:id="@+id/qr_button"
@@ -175,5 +177,18 @@
             app:srcCompat="@drawable/map_icon" />
 
     </RelativeLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/maps"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.63"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
