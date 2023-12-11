@@ -148,8 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
-        app:layout_constraintVertical_bias="0.9"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout_location"
         app:srcCompat="@drawable/helpiconwhite_1" />
 
 
@@ -159,6 +158,7 @@
         android:layout_height="50dp"
         android:background="@drawable/map_button"
         android:padding="2dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -176,19 +176,45 @@
             app:layout_constraintVertical_bias="0.23"
             app:srcCompat="@drawable/map_icon" />
 
+        <ImageButton
+            android:id="@+id/qr_back_button"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="qr_back_button"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:layout_constraintVertical_bias="0.23"
+            app:srcCompat="@drawable/qr_back_icon" />
+
     </RelativeLayout>
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/maps"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/maps_card_view"
         android:layout_width="350dp"
-        android:layout_height="150dp"
+        android:layout_height="170dp"
+        android:layout_margin="10dp"
         android:visibility="gone"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:cardPreventCornerOverlap="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.63"
-        tools:visibility="visible" />
+        app:layout_constraintVertical_bias="0.64">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/maps"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.63" />
+
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
