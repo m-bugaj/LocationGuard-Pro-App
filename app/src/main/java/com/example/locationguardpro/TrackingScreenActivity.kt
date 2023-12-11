@@ -6,6 +6,8 @@ import android.location.Location
 import android.os.Bundle
 import android.widget.RelativeLayout
 import android.widget.ImageButton
+import android.view.animation.AnimationUtils
+import androidx.cardview.widget.CardView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -54,20 +56,42 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val relativeLayout = findViewById<RelativeLayout>(R.id.relativeLayout)
         val relativeLayoutLocation = findViewById<RelativeLayout>(R.id.relativeLayout_location)
         val locationButton = findViewById<ImageButton>(R.id.location_button)
-        val map_view = findViewById<FragmentContainerView>(R.id.maps)
+        val qrBackButton = findViewById<ImageButton>(R.id.qr_back_button)
+        val map_view = findViewById<CardView>(R.id.maps_card_view)
 
-        // Dodaj obsługę kliknięcia dla RelativeLayout_location
-        relativeLayoutLocation.setOnClickListener {
-            // Ukryj RelativeLayout
-            relativeLayout.visibility = View.GONE
-            map_view.visibility = View.VISIBLE
-        }
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
+
+//        // Dodaj obsługę kliknięcia dla RelativeLayout_location
+//        relativeLayoutLocation.setOnClickListener {
+//            // Ukryj RelativeLayout
+//            relativeLayout.visibility = View.GONE
+//            map_view.visibility = View.VISIBLE
+//        }
 
         // Dodaj obsługę kliknięcia dla przycisku wewnątrz RelativeLayout_location
         locationButton.setOnClickListener {
             // Ukryj RelativeLayout
+            relativeLayout.startAnimation(fadeOut)
             relativeLayout.visibility = View.GONE
+            map_view.startAnimation(fadeIn)
             map_view.visibility = View.VISIBLE
+            locationButton.startAnimation(fadeOut)
+            locationButton.visibility = View.GONE
+            qrBackButton.startAnimation(fadeIn)
+            qrBackButton.visibility = View.VISIBLE
+        }
+
+        qrBackButton.setOnClickListener {
+            // Ukryj RelativeLayout
+            relativeLayout.startAnimation(fadeIn)
+            relativeLayout.visibility = View.VISIBLE
+            map_view.startAnimation(fadeOut)
+            map_view.visibility = View.GONE
+            qrBackButton.startAnimation(fadeOut)
+            qrBackButton.visibility = View.GONE
+            locationButton.startAnimation(fadeIn)
+            locationButton.visibility = View.VISIBLE
         }
 
     }
