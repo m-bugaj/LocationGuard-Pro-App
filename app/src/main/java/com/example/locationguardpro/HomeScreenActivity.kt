@@ -4,6 +4,11 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.widget.Button
+import android.content.Intent
+import android.util.Log
+import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -38,8 +43,28 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 REQUEST_LOCATION_PERMISSION
             )
         }
+
+        val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
+        val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
+
+        val startTrackingButton = findViewById<Button>(R.id.start_button)
+
+
+        startTrackingButton.setOnClickListener {
+            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+            val intent = Intent(this, TrackingScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
         val mapFragment = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
+
+
     }
 
     override fun onRequestPermissionsResult(
@@ -116,4 +141,5 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
     }
+
 }

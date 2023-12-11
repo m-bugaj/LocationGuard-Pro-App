@@ -1,11 +1,13 @@
 package com.example.locationguardpro
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.widget.RelativeLayout
 import android.widget.ImageButton
+import android.widget.Button
 import android.view.animation.AnimationUtils
 import androidx.cardview.widget.CardView
 import androidx.appcompat.app.AppCompatActivity
@@ -62,12 +64,26 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
+        val stopTrackingButton = findViewById<Button>(R.id.stop_button)
+
+
 //        // Dodaj obsługę kliknięcia dla RelativeLayout_location
 //        relativeLayoutLocation.setOnClickListener {
 //            // Ukryj RelativeLayout
 //            relativeLayout.visibility = View.GONE
 //            map_view.visibility = View.VISIBLE
 //        }
+
+        stopTrackingButton.setOnClickListener {
+            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+            val intent = Intent(this, HomeScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
 
         // Dodaj obsługę kliknięcia dla przycisku wewnątrz RelativeLayout_location
         locationButton.setOnClickListener {
@@ -170,5 +186,14 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
     }
+
+//    fun start_tracking_button_onClick(view: View) {
+//        view.setFocusable(false);
+//        // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+//        val intent = Intent(this, HomeScreenActivity::class.java)
+//
+//        // Uruchamiamy aktywność
+//        startActivity(intent)
+//    }
 
 }
