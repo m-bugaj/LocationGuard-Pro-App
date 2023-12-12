@@ -6,9 +6,8 @@ import android.location.Location
 import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
-import android.util.Log
-import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -48,11 +47,23 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
         val startTrackingButton = findViewById<Button>(R.id.start_button)
+        val settingsButton = findViewById<ImageButton>(R.id.settings_button)
 
 
         startTrackingButton.setOnClickListener {
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, TrackingScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+        settingsButton.setOnClickListener{
+            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+            val intent = Intent(this, LoginScreenActivity::class.java)
 
             // Uruchamiamy aktywność
             startActivity(intent)
