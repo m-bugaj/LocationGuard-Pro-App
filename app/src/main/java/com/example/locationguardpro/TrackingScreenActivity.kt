@@ -25,6 +25,7 @@ import com.example.locationguardpro.R
 
 import androidx.fragment.app.FragmentContainerView
 import android.view.View
+//import android.R.anim
 
 
 
@@ -63,8 +64,10 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
+        val noActionAnim = AnimationUtils.loadAnimation(this, R.anim.noaction)
 
         val stopTrackingButton = findViewById<Button>(R.id.stop_button)
+        val helpButton = findViewById<ImageButton>(R.id.help_button)
 
 
 //        // Dodaj obsługę kliknięcia dla RelativeLayout_location
@@ -82,7 +85,13 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
 
             // Ustawiamy animację wejścia i wyjścia
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+        helpButton.setOnClickListener {
+            val intent = Intent(this, HelpScreenActivity::class.java)
+            startActivity(intent)
+            overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, android.R.anim.fade_out)
         }
 
         // Dodaj obsługę kliknięcia dla przycisku wewnątrz RelativeLayout_location
