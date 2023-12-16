@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ReportsScreenActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/app_logo"
+        android:src="@drawable/logowh_1"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.024"
+        app:srcCompat="@drawable/logowh_1"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="276dp"
+        android:layout_height="91dp"
+        android:contentDescription="@string/app_text_logo"
+        android:fontFamily="@font/jura_medium"
+        android:shadowColor="#9F000000"
+        android:shadowDx="0"
+        android:shadowDy="4"
+        android:shadowRadius="25"
+        android:text="@string/app_name_space"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="38sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.135"
+        tools:visibility="visible" />
+
+    <CalendarView
+        android:id="@+id/calendarView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:dateTextAppearance="@style/CalendarDayText"
+        android:shownWeekCount="6"
+        android:theme="@style/CalenderViewCustom"
+        android:weekDayTextAppearance="@style/CalendarWeekDayText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.641" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout_back_arrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/map_button"
+        android:padding="2dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.87">
+
+        <ImageButton
+            android:id="@+id/back_arrow"
+            style="@style/Widget.AppCompat.ImageButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="location_button"
+            android:scaleType="centerCrop"
+            android:visibility="visible"
+            app:layout_constraintVertical_bias="0.23"
+            app:srcCompat="@drawable/baseline_arrow_back_24" />
+
+    </RelativeLayout>
+
+    <ImageButton
+        android:id="@+id/settings_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00D13434"
+        android:contentDescription="settings_button"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.38"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        app:srcCompat="@drawable/_settingsicon_1" />
+
+    <ImageButton
+        android:id="@+id/help_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#00FFFFFF"
+        android:contentDescription="help_button"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.62"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.98"
+        app:srcCompat="@drawable/helpiconwhite_1" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
