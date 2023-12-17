@@ -1,0 +1,9 @@
+<!-- fragment_rectangle.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FF0000"> <!-- Ustaw kolor tła na czerwony (lub dowolny inny) -->
+
+    <!-- Dodaj dowolne elementy do prostokąta, na przykład tekst czy obrazek -->
+
+</RelativeLayout>
