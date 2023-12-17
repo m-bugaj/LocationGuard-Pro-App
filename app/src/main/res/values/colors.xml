@@ -17,4 +17,6 @@
     <color name="map_button">#E0DFD9</color>
     <color name="transparent">#00E0DFD9</color>
     <color name="ticket">#676B6D</color>
+    <color name="blue_calendar">#41D3BD</color>
+    <color name="material_yellow">#FFEB3B</color>
 </resources>
