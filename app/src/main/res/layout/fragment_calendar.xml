@@ -1,0 +1,11 @@
+<!-- fragment_calendar.xml -->
+<CalendarView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/calendarView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:dateTextAppearance="@style/CalendarDayText"
+    android:shownWeekCount="6"
+    android:theme="@style/CalenderViewCustom"
+    android:weekDayTextAppearance="@style/CalendarWeekDayText"
+    />

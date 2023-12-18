@@ -8,6 +8,7 @@ import android.widget.Button
 import android.content.Intent
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
+import androidx.core.app.ActivityOptionsCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import android.R.anim
 
 class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
@@ -49,9 +51,11 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val startTrackingButton = findViewById<Button>(R.id.start_button)
         val settingsButton = findViewById<ImageButton>(R.id.settings_button)
         val reportsButton = findViewById<Button>(R.id.reports_button)
+        val helpButton = findViewById<ImageButton>(R.id.help_button)
 
 
         startTrackingButton.setOnClickListener {
+
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, TrackingScreenActivity::class.java)
 
@@ -59,7 +63,14 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
 
             // Ustawiamy animację wejścia i wyjścia
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            overridePendingTransition(anim.fade_in, anim.fade_out)
+        }
+
+        helpButton.setOnClickListener {
+            val intent = Intent(this, HelpScreenActivity::class.java)
+            intent.putExtra("isFromHomeScreen", 1)
+            startActivity(intent)
+            overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, anim.fade_in)
         }
 
         settingsButton.setOnClickListener{

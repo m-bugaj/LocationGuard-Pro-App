@@ -22,6 +22,12 @@
             android:name=".LoginScreenActivity"
             android:exported="true" />
         <activity
+            android:name=".ReportsScreenActivity"
+            android:exported="true" />
+        <activity
+            android:name=".HelpScreenActivity"
+            android:exported="true" />
+        <activity
             android:name=".TrackingScreenActivity"
             android:exported="true" /> <!-- Zmienić potem na false i przetestować -->
         <meta-data
