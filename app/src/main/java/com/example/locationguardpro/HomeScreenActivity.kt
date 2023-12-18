@@ -48,6 +48,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val startTrackingButton = findViewById<Button>(R.id.start_button)
         val settingsButton = findViewById<ImageButton>(R.id.settings_button)
+        val reportsButton = findViewById<Button>(R.id.reports_button)
 
 
         startTrackingButton.setOnClickListener {
@@ -62,7 +63,6 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         settingsButton.setOnClickListener{
-            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, LoginScreenActivity::class.java)
 
             // Uruchamiamy aktywność
@@ -71,6 +71,18 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
+
+        reportsButton.setOnClickListener{
+            val intent = Intent(this, StatisticsScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
