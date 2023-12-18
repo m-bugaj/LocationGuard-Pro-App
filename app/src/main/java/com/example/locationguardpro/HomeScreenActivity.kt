@@ -84,7 +84,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         reportsButton.setOnClickListener{
-            val intent = Intent(this, StatisticsScreenActivity::class.java)
+            val intent = Intent(this, ReportsScreenActivity::class.java)
 
             // Uruchamiamy aktywność
             startActivity(intent)
