@@ -16,6 +16,9 @@
         android:theme="@style/Theme.LocationGuardPro"
         tools:targetApi="31">
         <activity
+            android:name=".LoginScreenActivity"
+            android:exported="true" />
+        <activity
             android:name=".ReportsScreenActivity"
             android:exported="true" />
         <activity

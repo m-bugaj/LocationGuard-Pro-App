@@ -6,8 +6,6 @@ import android.location.Location
 import android.os.Bundle
 import android.widget.Button
 import android.content.Intent
-import android.util.Log
-import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageButton
 import androidx.core.app.ActivityOptionsCompat
@@ -51,6 +49,8 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
         val startTrackingButton = findViewById<Button>(R.id.start_button)
+        val settingsButton = findViewById<ImageButton>(R.id.settings_button)
+        val reportsButton = findViewById<Button>(R.id.reports_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
 
 
@@ -72,6 +72,28 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, anim.fade_in)
         }
+
+        settingsButton.setOnClickListener{
+            val intent = Intent(this, LoginScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+        reportsButton.setOnClickListener{
+            val intent = Intent(this, ReportsScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
