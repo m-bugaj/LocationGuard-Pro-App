@@ -1,14 +1,15 @@
 package com.example.locationguardpro
 
 import android.Manifest
+import android.R.anim
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.widget.Button
-import android.content.Intent
+import android.os.SystemClock
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageButton
-import androidx.core.app.ActivityOptionsCompat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -19,7 +20,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import android.R.anim
 
 class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
@@ -52,18 +52,23 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val settingsButton = findViewById<ImageButton>(R.id.settings_button)
         val reportsButton = findViewById<Button>(R.id.reports_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
+        val stopTrackingButton = findViewById<Button>(R.id.stop_button)
+        var startTime: Long = 0
 
 
         startTrackingButton.setOnClickListener {
+            val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
 
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, TrackingScreenActivity::class.java)
+            intent.putExtra("START_TIME_SECONDS", startTimeSeconds)
 
             // Uruchamiamy aktywność
             startActivity(intent)
 
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(anim.fade_in, anim.fade_out)
+
         }
 
         helpButton.setOnClickListener {
@@ -92,6 +97,16 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
+
+        stopTrackingButton.setOnClickListener{
+            if(!startTime.equals(0)){
+                val difference = System.currentTimeMillis() - startTime
+            }
+
+
+        }
+
+
 
 
 

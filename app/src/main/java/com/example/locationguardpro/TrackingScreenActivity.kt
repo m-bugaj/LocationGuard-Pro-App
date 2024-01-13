@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.os.SystemClock
 import android.widget.RelativeLayout
 import android.widget.ImageButton
 import android.widget.Button
@@ -69,6 +70,8 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val stopTrackingButton = findViewById<Button>(R.id.stop_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
 
+        val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", 0)
+
 
 //        // Dodaj obsługę kliknięcia dla RelativeLayout_location
 //        relativeLayoutLocation.setOnClickListener {
@@ -78,6 +81,10 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 //        }
 
         stopTrackingButton.setOnClickListener {
+            val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
+            val elapsedTimeSeconds = endTimeSeconds - startTimeSeconds
+
+
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, HomeScreenActivity::class.java)
 
