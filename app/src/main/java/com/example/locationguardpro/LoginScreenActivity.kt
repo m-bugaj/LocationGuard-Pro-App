@@ -43,6 +43,12 @@ class LoginScreenActivity :  AppCompatActivity() {
         val myApplication = application as MyApplication
         val appDatabase = myApplication.appDatabase
 
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        if(!sharedPreferences.getLong("USER_ID", -1).equals(-1)){
+            loginButton.background = getDrawable(R.drawable.start_button_aft)
+            logoutButton.visibility = View.VISIBLE
+        }
+
 
 
         loginButton.setOnClickListener{
@@ -58,7 +64,6 @@ class LoginScreenActivity :  AppCompatActivity() {
 
                 if(user != null){
                     showToast("Login successful")
-                    val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
                     sharedPreferences.edit().putLong("USER_ID", user.userId).apply()
                     numberTextBox.text.clear()
                     passwordTextBox.text.clear()
