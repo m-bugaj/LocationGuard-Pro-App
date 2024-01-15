@@ -1,6 +1,7 @@
 package com.example.locationguardpro
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -26,6 +27,13 @@ import com.example.locationguardpro.R
 
 import androidx.fragment.app.FragmentContainerView
 import android.view.View
+import android.widget.Toast
+import com.example.locationguardpro.model.WorkHours
+import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 //import android.R.anim
 
 
@@ -70,7 +78,11 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val stopTrackingButton = findViewById<Button>(R.id.stop_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
 
-        val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", 0)
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", -1)
+
+        val myApplication = application as MyApplication
+        val appDatabase = myApplication.appDatabase
 
 
 //        // Dodaj obsługę kliknięcia dla RelativeLayout_location
@@ -81,18 +93,36 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 //        }
 
         stopTrackingButton.setOnClickListener {
-            val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
-            val elapsedTimeSeconds = endTimeSeconds - startTimeSeconds
+            val userId = sharedPreferences.getLong("USER_ID", -1)
+            if(!userId.equals(-1)){
+                val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
+                val elapsedTimeSeconds = endTimeSeconds - startTimeSeconds
+                val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+                val currentDate = Date(System.currentTimeMillis())
+                val date = dateFormat.format(currentDate)
+                val elapsedTimeHours = elapsedTimeSeconds/3600
+
+                val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours.toInt())
+                val workHoursDao = appDatabase.workHoursDao()
+                runBlocking { workHoursDao.insertWorkHours(workHours) }
+                sharedPreferences.edit().remove("START_TIME_SECONDS")
 
 
-            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
-            val intent = Intent(this, HomeScreenActivity::class.java)
 
-            // Uruchamiamy aktywność
-            startActivity(intent)
 
-            // Ustawiamy animację wejścia i wyjścia
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+                val intent = Intent(this, HomeScreenActivity::class.java)
+                intent.putExtra("STOP", true)
+
+                // Uruchamiamy aktywność
+                startActivity(intent)
+
+                // Ustawiamy animację wejścia i wyjścia
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            else
+                Toast.makeText(this, "Log in to measure time", Toast.LENGTH_SHORT).show()
+
         }
 
         helpButton.setOnClickListener {

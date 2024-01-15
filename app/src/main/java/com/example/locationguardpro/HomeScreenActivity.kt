@@ -2,6 +2,7 @@ package com.example.locationguardpro
 
 import android.Manifest
 import android.R.anim
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -10,6 +11,7 @@ import android.os.SystemClock
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -53,21 +55,38 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val reportsButton = findViewById<Button>(R.id.reports_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
         val stopTrackingButton = findViewById<Button>(R.id.stop_button)
-        var startTime: Long = 0
-
-
-        startTrackingButton.setOnClickListener {
-            val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
-
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        var startTime: Long = sharedPreferences.getLong("START_TIME_SECONDS",-1)
+        val stop = intent.getBooleanExtra("STOP", false)
+        if(!stop && !startTime.equals(-1)){
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, TrackingScreenActivity::class.java)
-            intent.putExtra("START_TIME_SECONDS", startTimeSeconds)
 
             // Uruchamiamy aktywność
             startActivity(intent)
+        }
 
-            // Ustawiamy animację wejścia i wyjścia
-            overridePendingTransition(anim.fade_in, anim.fade_out)
+
+
+        startTrackingButton.setOnClickListener {
+            val userId = sharedPreferences.getLong("USER_ID", -1)
+            if(!userId.equals(-1)){
+                val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
+                sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds)
+
+                // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+                val intent = Intent(this, TrackingScreenActivity::class.java)
+                intent.putExtra("START_TIME_SECONDS", startTimeSeconds)
+
+                // Uruchamiamy aktywność
+                startActivity(intent)
+
+                // Ustawiamy animację wejścia i wyjścia
+                overridePendingTransition(anim.fade_in, anim.fade_out)
+            }
+            else
+                Toast.makeText(this, "Log in to measure time", Toast.LENGTH_SHORT).show()
+
 
         }
 

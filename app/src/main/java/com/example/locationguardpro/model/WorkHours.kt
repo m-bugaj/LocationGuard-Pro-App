@@ -19,6 +19,6 @@ data class WorkHours(
     @PrimaryKey(autoGenerate = true)
     val workHoursId: Long = 0,
     val userId: Long,
-    val date: String, // Przyjmuję, że data jest przechowywana jako tekst
+    val date: String, 
     val hoursWorked: Int
 )
