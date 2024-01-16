@@ -57,8 +57,8 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val stopTrackingButton = findViewById<Button>(R.id.stop_button)
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         var startTime: Long = sharedPreferences.getLong("START_TIME_SECONDS",-1)
-        val stop = intent.getBooleanExtra("STOP", false)
-        if(!stop && !startTime.equals(-1)){
+        var stop = intent.getBooleanExtra("STOP", false)
+        if(!stop && startTime>-1){
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, TrackingScreenActivity::class.java)
 
@@ -72,7 +72,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             val userId = sharedPreferences.getLong("USER_ID", -1)
             if(!userId.equals(-1)){
                 val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
-                sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds)
+                sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds).apply()
 
                 // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
                 val intent = Intent(this, TrackingScreenActivity::class.java)

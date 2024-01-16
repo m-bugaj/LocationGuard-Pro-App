@@ -105,7 +105,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours.toInt())
                 val workHoursDao = appDatabase.workHoursDao()
                 runBlocking { workHoursDao.insertWorkHours(workHours) }
-                sharedPreferences.edit().remove("START_TIME_SECONDS")
+                sharedPreferences.edit().remove("START_TIME_SECONDS").apply()
 
 
 
