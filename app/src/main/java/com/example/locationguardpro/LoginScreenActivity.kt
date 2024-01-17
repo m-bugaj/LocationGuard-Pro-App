@@ -44,7 +44,7 @@ class LoginScreenActivity :  AppCompatActivity() {
         val appDatabase = myApplication.appDatabase
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        if(!sharedPreferences.getLong("USER_ID", -1).equals(-1)){
+        if(sharedPreferences.getLong("USER_ID", -1)>-1){
             loginButton.background = getDrawable(R.drawable.start_button_aft)
             logoutButton.visibility = View.VISIBLE
         }

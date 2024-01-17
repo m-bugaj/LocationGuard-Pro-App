@@ -15,4 +15,7 @@ interface WorkHoursDao {
 
     @Query("SELECT SUM(hoursWorked) FROM work_hours WHERE userId = :userId")
     suspend fun getTotalHoursWorkedByUser(userId: Long): Int
+
+    @Query("SELECT SUM(hoursWorked) AS totalHours FROM work_hours WHERE userId = :userId AND date = :selectedDate")
+    suspend fun getTotalHoursForDate(userId: Long, selectedDate: String): Double
 }

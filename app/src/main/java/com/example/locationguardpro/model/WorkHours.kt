@@ -20,5 +20,5 @@ data class WorkHours(
     val workHoursId: Long = 0,
     val userId: Long,
     val date: String, 
-    val hoursWorked: Int
+    val hoursWorked: Double
 )

@@ -44,6 +44,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracking_screen)
 
+
         // Sprawdź uprawnienia lokalizacyjne
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -100,9 +101,9 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
                 val currentDate = Date(System.currentTimeMillis())
                 val date = dateFormat.format(currentDate)
-                val elapsedTimeHours = elapsedTimeSeconds/3600
+                val elapsedTimeHours = elapsedTimeSeconds.toDouble()/3600.0
 
-                val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours.toInt())
+                val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours)
                 val workHoursDao = appDatabase.workHoursDao()
                 runBlocking { workHoursDao.insertWorkHours(workHours) }
                 sharedPreferences.edit().remove("START_TIME_SECONDS").apply()
