@@ -1,20 +1,27 @@
 package com.example.locationguardpro
 
+//import me.dm7.barcodescanner.zxing.ZXingScannerView
+
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.widget.RelativeLayout
-import android.widget.ImageButton
-import android.widget.Button
+import android.view.View
 import android.view.animation.AnimationUtils
-import androidx.cardview.widget.CardView
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.locationguardpro.model.WorkHours
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -22,13 +29,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-
-import com.example.locationguardpro.R
-
-import androidx.fragment.app.FragmentContainerView
-import android.view.View
-import android.widget.Toast
-import com.example.locationguardpro.model.WorkHours
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -40,10 +42,16 @@ import java.util.Locale
 
 class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
+    private val PERMISSION_REQUEST_CAMERA = 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracking_screen)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
+            }
+        }
 
         // Sprawdź uprawnienia lokalizacyjne
         if (ContextCompat.checkSelfPermission(
@@ -78,6 +86,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val stopTrackingButton = findViewById<Button>(R.id.stop_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
+        val qrScannerButton = findViewById<RelativeLayout>(R.id.relativeLayout)
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", -1)
@@ -132,6 +141,11 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, android.R.anim.fade_out)
         }
 
+        qrScannerButton.setOnClickListener {
+            initQRCodeScanner()
+        }
+
+
         // Dodaj obsługę kliknięcia dla przycisku wewnątrz RelativeLayout_location
         locationButton.setOnClickListener {
             // Ukryj RelativeLayout
@@ -159,6 +173,28 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
+    private fun initQRCodeScanner() {
+        // Initialize QR code scanner here
+        val integrator = IntentIntegrator(this)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+        integrator.setOrientationLocked(true)
+        integrator.setPrompt("Scan a QR code")
+        integrator.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null) {
+            if (result.contents == null) {
+                Toast.makeText(this, "Skanowanie anulowane", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Zeskanowano: ${result.contents}", Toast.LENGTH_LONG).show()
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -173,6 +209,14 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             } else {
                 // Uprawnienia lokalizacyjne nie zostały udzielone
                 // Obsłuż ten przypadek (np. wyświetl komunikat o braku dostępu)
+            }
+        }
+        if (requestCode == PERMISSION_REQUEST_CAMERA) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                initQRCodeScanner();
+            } else {
+                Toast.makeText(this, "Camera permission is required", Toast.LENGTH_LONG).show();
+                finish();
             }
         }
     }
@@ -244,3 +288,4 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 //    }
 
 }
+

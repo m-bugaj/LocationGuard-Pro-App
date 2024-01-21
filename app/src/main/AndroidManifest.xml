@@ -3,9 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.locationguardpro">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
 
     <application
         android:name=".MyApplication"
@@ -16,6 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationGuardPro"
         tools:targetApi="31">
+        <activity
+            android:name=".QrScannerActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginScreenActivity"
             android:exported="true" />
