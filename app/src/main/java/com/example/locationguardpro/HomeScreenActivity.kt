@@ -70,7 +70,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
         startTrackingButton.setOnClickListener {
             val userId = sharedPreferences.getLong("USER_ID", -1)
-            if(!userId.equals(-1)){
+            if(userId > -1){
                 val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
                 sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds).apply()
 
@@ -108,13 +108,18 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         reportsButton.setOnClickListener{
-            val intent = Intent(this, ReportsScreenActivity::class.java)
+            val userId = sharedPreferences.getLong("USER_ID", -1)
+            if(userId > -1) {
+                val intent = Intent(this, ReportsScreenActivity::class.java)
 
-            // Uruchamiamy aktywność
-            startActivity(intent)
+                // Uruchamiamy aktywność
+                startActivity(intent)
 
-            // Ustawiamy animację wejścia i wyjścia
-            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                // Ustawiamy animację wejścia i wyjścia
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            }
+            else
+                Toast.makeText(this, "Log in to see reports", Toast.LENGTH_SHORT).show()
         }
 
         stopTrackingButton.setOnClickListener{

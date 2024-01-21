@@ -112,6 +112,7 @@ class ChartFragment: Fragment(R.layout.fragment_chart) {
             // Ustawienie koloru etykiet osi Y na biały
             val leftYAxis: YAxis = barChart.axisLeft
             leftYAxis.textColor = Color.White.hashCode()
+            leftYAxis.axisMinimum = 0F
 
             val rightYAxis: YAxis = barChart.axisRight
             rightYAxis.textColor = Color.White.hashCode()
