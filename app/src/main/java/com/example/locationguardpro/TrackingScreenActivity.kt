@@ -43,6 +43,11 @@ import java.util.Locale
 class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private val PERMISSION_REQUEST_CAMERA = 1
+    private val qrCodes = listOf(
+        QrCode("12345"),
+        QrCode("67890"),
+        // Dodaj inne kody QR, które są ważne dla pracownika
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracking_screen)
@@ -188,10 +193,22 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             if (result.contents == null) {
                 Toast.makeText(this, "Skanowanie anulowane", Toast.LENGTH_LONG).show()
             } else {
-                Toast.makeText(this, "Zeskanowano: ${result.contents}", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this, "Zeskanowano: ${result.contents}", Toast.LENGTH_LONG).show()
+                checkScannedQRCode(result.contents)
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data)
+        }
+    }
+
+    private fun checkScannedQRCode(scannedCode: String) {
+        val found = qrCodes.any { it.content == scannedCode }
+        if (found) {
+            Toast.makeText(this, "Zeskanowano poprawny kod", Toast.LENGTH_LONG).show()
+            // Pracownik jest na właściwym miejscu
+        } else {
+            Toast.makeText(this, "Nieprawidłowy kod", Toast.LENGTH_LONG).show()
+            // Pracownik nie jest na miejscu, podejmij odpowiednie działania
         }
     }
 
@@ -288,4 +305,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 //    }
 
 }
+
+data class QrCode(val content: String)
+
 
