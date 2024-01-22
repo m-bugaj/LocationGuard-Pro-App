@@ -35,7 +35,7 @@ class MyApplication : Application() {
     }
 
     private fun addDefaultUserToDatabase() {
-        val defaultUser = User(username = "Jan Kowalski", email = "jan@kowalski.com", password = "Abcd1234")
+        val defaultUser = User(username = "Jan Kowalski", email = "jan@kowalski.com", password = "Abcd1234", isAdmin = true)
         runBlocking {
             appDatabase.userDao().insertUser(defaultUser)
         }

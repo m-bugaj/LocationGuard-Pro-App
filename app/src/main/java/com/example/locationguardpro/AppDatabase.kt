@@ -7,7 +7,7 @@ import com.example.locationguardpro.dao.WorkHoursDao
 import com.example.locationguardpro.model.User
 import com.example.locationguardpro.model.WorkHours
 
-@Database(entities = [User::class, WorkHours::class], version = 1)
+@Database(entities = [User::class, WorkHours::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun workHoursDao(): WorkHoursDao
