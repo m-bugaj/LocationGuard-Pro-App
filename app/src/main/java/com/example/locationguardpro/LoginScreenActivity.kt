@@ -2,7 +2,6 @@ package com.example.locationguardpro
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -10,20 +9,8 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
-import com.example.locationguardpro.model.User
-import com.example.locationguardpro.ui.theme.LocationGuardProTheme
 import kotlinx.coroutines.launch
 
 class LoginScreenActivity :  AppCompatActivity() {
@@ -37,8 +24,9 @@ class LoginScreenActivity :  AppCompatActivity() {
         val loginButton = findViewById<Button>(R.id.login_button)
         val logoutButton = findViewById<Button>(R.id.logout_button)
         val numberTextBox = findViewById<EditText>(R.id.numberTextBox)
-        val passwordTextBox = findViewById<EditText>(R.id.passwordTextBox)
+        val passwordTextBox = findViewById<EditText>(R.id.password_text_box)
         val backButton = findViewById<ImageButton>(R.id.back_button)
+        val helpButton = findViewById<ImageButton>(R.id.help_button)
 
         val myApplication = application as MyApplication
         val appDatabase = myApplication.appDatabase
@@ -65,6 +53,7 @@ class LoginScreenActivity :  AppCompatActivity() {
                 if(user != null){
                     showToast("Login successful")
                     sharedPreferences.edit().putLong("USER_ID", user.userId).apply()
+                    sharedPreferences.edit().putBoolean("IS_ADMIN", user.isAdmin).apply()
                     numberTextBox.text.clear()
                     passwordTextBox.text.clear()
                     loginButton.background = getDrawable(R.drawable.start_button_aft)
@@ -90,12 +79,20 @@ class LoginScreenActivity :  AppCompatActivity() {
 
             // Usuń wartość z SharedPreferences
             sharedPreferences.edit().remove("USER_ID").apply()
+            sharedPreferences.edit().remove("IS_ADMIN").apply()
         }
 
         backButton.setOnClickListener{
             val intent = Intent(this, HomeScreenActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+        helpButton.setOnClickListener {
+            val intent = Intent(this, HelpScreenActivity::class.java)
+            intent.putExtra("isFromHomeScreen", 1)
+            startActivity(intent)
+            overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, android.R.anim.fade_in)
         }
 
 

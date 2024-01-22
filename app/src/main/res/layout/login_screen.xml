@@ -6,7 +6,24 @@
     android:layout_height="match_parent">
 
     <ImageButton
-        android:id="@+id/help_button2"
+        android:id="@+id/back_button"
+        style="@style/Widget.AppCompat.ImageButton"
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:backgroundTint="#00FFFFFF"
+        android:contentDescription="back_button"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.807"
+        app:srcCompat="@drawable/back_icon" />
+
+    <ImageButton
+        android:id="@+id/help_button"
         style="@style/Widget.AppCompat.ImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,25 +35,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.975"
+        app:layout_constraintVertical_bias="0.928"
         app:srcCompat="@drawable/helpiconwhite_1" />
-
-    <ImageButton
-        android:id="@+id/back_button"
-        style="@style/Widget.AppCompat.ImageButton"
-        android:layout_width="76dp"
-        android:layout_height="76dp"
-        android:backgroundTint="#00FFFFFF"
-        android:contentDescription="back_button"
-        android:scaleType="centerCrop"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="@+id/help_button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.863"
-        app:srcCompat="@drawable/back_icon" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -84,7 +84,7 @@
         android:background="@drawable/start_button_aft"
         android:cursorVisible="false"
         android:ems="10"
-        android:hint="Enter worker's number"
+        android:hint="Enter worker's name"
         android:inputType="text"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -95,7 +95,7 @@
         app:layout_constraintVertical_bias="0.361" />
 
     <EditText
-        android:id="@+id/passwordTextBox"
+        android:id="@+id/password_text_box"
         android:layout_width="293dp"
         android:layout_height="66dp"
         android:background="@drawable/start_button_aft"
