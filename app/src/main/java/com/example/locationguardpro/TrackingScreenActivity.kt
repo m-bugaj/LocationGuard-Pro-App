@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.Toast
+import android.os.CountDownTimer
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
@@ -36,6 +37,15 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+import android.util.Log
+
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Handler
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+
 //import android.R.anim
 
 
@@ -43,11 +53,24 @@ import java.util.Locale
 class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private val PERMISSION_REQUEST_CAMERA = 1
+    private val PERMISSION_REQUEST_VIBRATE = 2
     private val qrCodes = listOf(
         QrCode("12345"),
         QrCode("67890"),
         // Dodaj inne kody QR, które są ważne dla pracownika
     )
+    private var isTimerStopped = false
+    private var timeElapsedMillis: Long = 0
+    private var scanIntervalMillis: Long = 2 * 60 * 1000 // 2 godziny w milisekundach
+    private var scanGracePeriodMillis: Long = 1 * 60 * 1000 // 15 minut w milisekundach
+    private lateinit var timer: CountDownTimer
+    private val channelId = "moj_unikalny_channel_id"
+    private val channelName = "Nazwa mojego kanału"
+    private val NOTIFICATION_ID = 1
+    private var notificationCounter = 0
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tracking_screen)
@@ -57,6 +80,53 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSION_REQUEST_CAMERA)
             }
         }
+
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            val channel = NotificationChannel(
+//                channelId,
+//                channelName,
+//                NotificationManager.IMPORTANCE_HIGH
+//            )
+//
+//            val notificationManager = getSystemService(NotificationManager::class.java)
+//            notificationManager.createNotificationChannel(channel)
+//        }
+
+        // Sprawdź uprawnienia do powiadomień
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.VIBRATE
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Masz uprawnienia do korzystania z powiadomień, więc możesz wysłać powiadomienie
+//            sendNotification(this, "Twoje powiadomienie")
+        } else {
+            // Poproś użytkownika o uprawnienia do powiadomień
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.VIBRATE),
+                PERMISSION_REQUEST_VIBRATE
+            )
+        }
+
+        // Sprawdź uprawnienia do powiadomień
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Masz uprawnienia do korzystania z powiadomień, więc możesz wysłać powiadomienie
+//            sendNotification(this, "Twoje powiadomienie")
+        } else {
+            // Poproś użytkownika o uprawnienia do powiadomień
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                PERMISSION_REQUEST_VIBRATE
+            )
+        }
+
+
 
         // Sprawdź uprawnienia lokalizacyjne
         if (ContextCompat.checkSelfPermission(
@@ -107,7 +177,9 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 //            map_view.visibility = View.VISIBLE
 //        }
 
+
         stopTrackingButton.setOnClickListener {
+            Log.d("StopButton", "Stop button clicked")
             val userId = sharedPreferences.getLong("USER_ID", -1)
             if(!userId.equals(-1)){
                 val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
@@ -122,8 +194,9 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 runBlocking { workHoursDao.insertWorkHours(workHours) }
                 sharedPreferences.edit().remove("START_TIME_SECONDS").apply()
 
-
-
+                notificationCounter = 0
+                stopWork()
+                resetTimer()
 
                 // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
                 val intent = Intent(this, HomeScreenActivity::class.java)
@@ -176,7 +249,77 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             locationButton.visibility = View.VISIBLE
         }
 
+        startTimer()
     }
+
+    // Dodaj nową funkcję do inicjalizacji licznika czasu
+    private fun startTimer() {
+        showToast("startTimer")
+        timer = object : CountDownTimer(scanIntervalMillis - timeElapsedMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                // Aktualizuj czas upływający
+                timeElapsedMillis = scanIntervalMillis - millisUntilFinished
+                Log.d("Timer", "On tick: $millisUntilFinished")
+
+                // Sprawdź, czy pozostało mniej niż 15 minut (900 000 milisekund) do zakończenia
+                if (millisUntilFinished <= scanGracePeriodMillis && notificationCounter == 0) {
+                    // Wywołaj funkcję do wysyłania powiadomienia
+                    sendNotification(this@TrackingScreenActivity, "Twoje powiadomienie")
+                    notificationCounter++
+                }
+            }
+
+            override fun onFinish() {
+                // Upłynęły 2 godziny, a kod nie został zeskanowany
+                Log.d("Timer", "On finish: $timeElapsedMillis")
+                notificationCounter = 0
+                stopWork()
+                resetTimer()
+
+                // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+                val intent = Intent(this@TrackingScreenActivity, HomeScreenActivity::class.java)
+                intent.putExtra("STOP", true)
+
+                // Uruchamiamy aktywność
+                startActivity(intent)
+
+                // Ustawiamy animację wejścia i wyjścia
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+        }.start()
+    }
+
+
+    // Dodaj nową funkcję do zresetowania licznika czasu po zeskanowaniu kodu
+    private fun resetTimer() {
+        // Zatrzymaj aktualny licznik czasu
+        timer.cancel()
+
+        // Zresetuj czas i uruchom nowy licznik
+        timeElapsedMillis = 0
+//        isTimerStopped = false
+        Log.d("Timer", "Reset timer")
+        if (!isTimerStopped) {
+            startTimer()
+        }
+    }
+
+    // Dodaj nową funkcję do zatrzymywania pracy
+    private fun stopWork() {
+        // Zatrzymaj pracę
+        showToast("Zatrzymano pracę")
+        isTimerStopped = true
+        Log.d("Work", "Work stopped")
+    }
+
+    // Dodaj nową funkcję do wznowienia pracy
+    private fun startWork() {
+        // Wznow pracę
+        showToast("Wznowiono pracę")
+        isTimerStopped = false
+        Log.d("Work", "Work resumed")
+    }
+
 
     private fun initQRCodeScanner() {
         // Initialize QR code scanner here
@@ -205,7 +348,10 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val found = qrCodes.any { it.content == scannedCode }
         if (found) {
             Toast.makeText(this, "Zeskanowano poprawny kod", Toast.LENGTH_LONG).show()
+            notificationCounter = 0
             // Pracownik jest na właściwym miejscu
+            startWork()
+            resetTimer() // Resetuj licznik czasu po zeskanowaniu kodu
         } else {
             Toast.makeText(this, "Nieprawidłowy kod", Toast.LENGTH_LONG).show()
             // Pracownik nie jest na miejscu, podejmij odpowiednie działania
@@ -293,6 +439,59 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
+    }
+
+    private fun sendNotification(context: Context, message: String) {
+        createNotificationChannel()
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setContentTitle("Przypomnienie")
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            notify(NOTIFICATION_ID, builder.build())
+        }
+    }
+
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Channel Name"
+            val descriptionText = "Channel Description"
+            val importance = NotificationManager.IMPORTANCE_HIGH
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        handler.removeCallbacks(timerRunnable)
+//    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
 
 //    fun start_tracking_button_onClick(view: View) {
