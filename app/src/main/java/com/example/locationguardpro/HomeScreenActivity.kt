@@ -31,6 +31,10 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home) // Ustaw widok dla tej aktywności
 
+
+
+
+
         // Sprawdź uprawnienia lokalizacyjne
         if (ContextCompat.checkSelfPermission(
                 this,
@@ -49,6 +53,8 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             )
         }
 
+
+
         val fadeIn = AnimationUtils.loadAnimation(this, R.anim.fade_in)
         val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
@@ -61,15 +67,15 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
         val userId = sharedPreferences.getLong("USER_ID", -1)
         val isAdmin = sharedPreferences.getBoolean("IS_ADMIN", false)
-        var startTime: Long = sharedPreferences.getLong("START_TIME_SECONDS",-1)
-        var stop = intent.getBooleanExtra("STOP", false)
-        if(!stop && startTime>-1){
-            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
-            val intent = Intent(this, TrackingScreenActivity::class.java)
-
-            // Uruchamiamy aktywność
-            startActivity(intent)
-        }
+//        var startTime: Long = sharedPreferences.getLong("START_TIME_SECONDS",-1)
+//        var stop = intent.getBooleanExtra("STOP", false)
+//        if(!stop && startTime>-1){
+//            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+//            val intent = Intent(this, TrackingScreenActivity::class.java)
+//
+//            // Uruchamiamy aktywność
+//            startActivity(intent)
+//        }
         if(isAdmin){
             registerButton.visibility = View.VISIBLE
         }
@@ -80,12 +86,12 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         startTrackingButton.setOnClickListener {
 
             if(userId > -1){
-                val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
-                sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds).apply()
+//                val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
+//                sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds).apply()
 
                 // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
                 val intent = Intent(this, TrackingScreenActivity::class.java)
-                intent.putExtra("START_TIME_SECONDS", startTimeSeconds)
+//                intent.putExtra("START_TIME_SECONDS", startTimeSeconds)
 
                 // Uruchamiamy aktywność
                 startActivity(intent)
@@ -131,13 +137,13 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Log in to see reports", Toast.LENGTH_SHORT).show()
         }
 
-        stopTrackingButton.setOnClickListener{
-            if(!startTime.equals(0)){
-                val difference = System.currentTimeMillis() - startTime
-            }
-
-
-        }
+//        stopTrackingButton.setOnClickListener{
+//            if(!startTime.equals(0)){
+//                val difference = System.currentTimeMillis() - startTime
+//            }
+//
+//
+//        }
 
         registerButton.setOnClickListener{
             val intent = Intent(this, RegisterScreenActivity::class.java)
@@ -175,6 +181,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Obsłuż ten przypadek (np. wyświetl komunikat o braku dostępu)
             }
         }
+
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -232,6 +239,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val PERMISSION_REQUEST_POST_NOTIFICATIONS = 1
     }
 
 }

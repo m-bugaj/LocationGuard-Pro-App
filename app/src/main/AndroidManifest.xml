@@ -29,9 +29,6 @@
             android:name=".RegisterScreenActivity"
             android:exported="false" />
         <activity
-            android:name=".QrScannerActivity"
-            android:exported="false" />
-        <activity
             android:name=".LoginScreenActivity"
             android:exported="true" />
         <activity
