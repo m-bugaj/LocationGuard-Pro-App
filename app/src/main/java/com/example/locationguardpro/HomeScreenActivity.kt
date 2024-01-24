@@ -1,16 +1,19 @@
 package com.example.locationguardpro
 
 import android.Manifest
+import android.R.anim
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.opengl.Visibility
 import android.os.Bundle
-import android.widget.Button
-import android.content.Intent
-import android.util.Log
+import android.os.SystemClock
 import android.view.View
 import android.view.animation.AnimationUtils
+import android.widget.Button
 import android.widget.ImageButton
-import androidx.core.app.ActivityOptionsCompat
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -21,7 +24,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import android.R.anim
 
 class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
@@ -51,19 +53,50 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val fadeOut = AnimationUtils.loadAnimation(this, R.anim.fade_out)
 
         val startTrackingButton = findViewById<Button>(R.id.start_button)
+        val settingsButton = findViewById<ImageButton>(R.id.settings_button)
+        val reportsButton = findViewById<Button>(R.id.reports_button)
         val helpButton = findViewById<ImageButton>(R.id.help_button)
-
-
-        startTrackingButton.setOnClickListener {
-
+        val stopTrackingButton = findViewById<Button>(R.id.stop_button)
+        val registerButton = findViewById<Button>(R.id.register_button)
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val userId = sharedPreferences.getLong("USER_ID", -1)
+        val isAdmin = sharedPreferences.getBoolean("IS_ADMIN", false)
+        var startTime: Long = sharedPreferences.getLong("START_TIME_SECONDS",-1)
+        var stop = intent.getBooleanExtra("STOP", false)
+        if(!stop && startTime>-1){
             // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
             val intent = Intent(this, TrackingScreenActivity::class.java)
 
             // Uruchamiamy aktywność
             startActivity(intent)
+        }
+        if(isAdmin){
+            registerButton.visibility = View.VISIBLE
+        }
 
-            // Ustawiamy animację wejścia i wyjścia
-            overridePendingTransition(anim.fade_in, anim.fade_out)
+
+
+
+        startTrackingButton.setOnClickListener {
+
+            if(userId > -1){
+                val startTimeSeconds = SystemClock.elapsedRealtime() / 1000
+                sharedPreferences.edit().putLong("START_TIME_SECONDS", startTimeSeconds).apply()
+
+                // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+                val intent = Intent(this, TrackingScreenActivity::class.java)
+                intent.putExtra("START_TIME_SECONDS", startTimeSeconds)
+
+                // Uruchamiamy aktywność
+                startActivity(intent)
+
+                // Ustawiamy animację wejścia i wyjścia
+                overridePendingTransition(anim.fade_in, anim.fade_out)
+            }
+            else
+                Toast.makeText(this, "Log in to measure time", Toast.LENGTH_SHORT).show()
+
+
         }
 
         helpButton.setOnClickListener {
@@ -72,6 +105,53 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             startActivity(intent)
             overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, anim.fade_in)
         }
+
+        settingsButton.setOnClickListener{
+            val intent = Intent(this, LoginScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+        reportsButton.setOnClickListener{
+            val userId = sharedPreferences.getLong("USER_ID", -1)
+            if(userId > -1) {
+                val intent = Intent(this, ReportsScreenActivity::class.java)
+
+                // Uruchamiamy aktywność
+                startActivity(intent)
+
+                // Ustawiamy animację wejścia i wyjścia
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            }
+            else
+                Toast.makeText(this, "Log in to see reports", Toast.LENGTH_SHORT).show()
+        }
+
+        stopTrackingButton.setOnClickListener{
+            if(!startTime.equals(0)){
+                val difference = System.currentTimeMillis() - startTime
+            }
+
+
+        }
+
+        registerButton.setOnClickListener{
+            val intent = Intent(this, RegisterScreenActivity::class.java)
+
+            // Uruchamiamy aktywność
+            startActivity(intent)
+
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }
+
+
+
+
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.maps) as SupportMapFragment?
         mapFragment!!.getMapAsync(this)
