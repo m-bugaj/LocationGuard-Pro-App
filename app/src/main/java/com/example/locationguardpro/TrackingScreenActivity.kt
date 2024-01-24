@@ -43,6 +43,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Handler
+import android.widget.TextView
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 
@@ -61,13 +62,15 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
     )
     private var isTimerStopped = false
     private var timeElapsedMillis: Long = 0
-    private var scanIntervalMillis: Long = 2 * 60 * 1000 // 2 godziny w milisekundach
-    private var scanGracePeriodMillis: Long = 1 * 60 * 1000 // 15 minut w milisekundach
+    private var scanIntervalMillis: Long = 1 * 60 * 60 * 1000 // 2 godziny w milisekundach
+    private var scanGracePeriodMillis: Long = 59 * 60 * 1000 // 15 minut w milisekundach
     private lateinit var timer: CountDownTimer
-    private val channelId = "moj_unikalny_channel_id"
-    private val channelName = "Nazwa mojego kanału"
+    private val channelId = "moj_unikalny_channel_iddd"
+    private val channelName = "Nazwa mojego kanałuuu"
     private val NOTIFICATION_ID = 1
     private var notificationCounter = 0
+
+
 
 
 
@@ -81,16 +84,28 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            val channel = NotificationChannel(
-//                channelId,
-//                channelName,
-//                NotificationManager.IMPORTANCE_HIGH
-//            )
-//
-//            val notificationManager = getSystemService(NotificationManager::class.java)
-//            notificationManager.createNotificationChannel(channel)
-//        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
+
+
+
+        // Sprawdź uprawnienia do powiadomień
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            // Masz uprawnienia do korzystania z powiadomień, więc możesz wysłać powiadomienie
+//            sendNotification(this, "Twoje powiadomienie")
+        } else {
+            // Poproś użytkownika o uprawnienia do powiadomień
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                PERMISSION_REQUEST_POST_NOTIFICATIONS
+            )
+        }
 
         // Sprawdź uprawnienia do powiadomień
         if (ContextCompat.checkSelfPermission(
@@ -108,24 +123,6 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 PERMISSION_REQUEST_VIBRATE
             )
         }
-
-        // Sprawdź uprawnienia do powiadomień
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            // Masz uprawnienia do korzystania z powiadomień, więc możesz wysłać powiadomienie
-//            sendNotification(this, "Twoje powiadomienie")
-        } else {
-            // Poproś użytkownika o uprawnienia do powiadomień
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                PERMISSION_REQUEST_VIBRATE
-            )
-        }
-
 
 
         // Sprawdź uprawnienia lokalizacyjne
@@ -163,11 +160,11 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val helpButton = findViewById<ImageButton>(R.id.help_button)
         val qrScannerButton = findViewById<RelativeLayout>(R.id.relativeLayout)
 
-        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", -1)
+//        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+//        val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", -1)
 
-        val myApplication = application as MyApplication
-        val appDatabase = myApplication.appDatabase
+//        val myApplication = application as MyApplication
+//        val appDatabase = myApplication.appDatabase
 
 
 //        // Dodaj obsługę kliknięcia dla RelativeLayout_location
@@ -180,37 +177,19 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
         stopTrackingButton.setOnClickListener {
             Log.d("StopButton", "Stop button clicked")
-            val userId = sharedPreferences.getLong("USER_ID", -1)
-            if(!userId.equals(-1)){
-                val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
-                val elapsedTimeSeconds = endTimeSeconds - startTimeSeconds
-                val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
-                val currentDate = Date(System.currentTimeMillis())
-                val date = dateFormat.format(currentDate)
-                val elapsedTimeHours = elapsedTimeSeconds.toDouble()/3600.0
+            notificationCounter = 0
+            stopWork()
+            resetTimer()
 
-                val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours)
-                val workHoursDao = appDatabase.workHoursDao()
-                runBlocking { workHoursDao.insertWorkHours(workHours) }
-                sharedPreferences.edit().remove("START_TIME_SECONDS").apply()
+            // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
+            val intent = Intent(this, HomeScreenActivity::class.java)
+            intent.putExtra("STOP", true)
 
-                notificationCounter = 0
-                stopWork()
-                resetTimer()
+            // Uruchamiamy aktywność
+            startActivity(intent)
 
-                // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
-                val intent = Intent(this, HomeScreenActivity::class.java)
-                intent.putExtra("STOP", true)
-
-                // Uruchamiamy aktywność
-                startActivity(intent)
-
-                // Ustawiamy animację wejścia i wyjścia
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            }
-            else
-                Toast.makeText(this, "Log in to measure time", Toast.LENGTH_SHORT).show()
-
+            // Ustawiamy animację wejścia i wyjścia
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
 
         helpButton.setOnClickListener {
@@ -261,6 +240,9 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
                 timeElapsedMillis = scanIntervalMillis - millisUntilFinished
                 Log.d("Timer", "On tick: $millisUntilFinished")
 
+                // Aktualizuj interfejs użytkownika (możesz użyć TextView, ProgressBar itp.)
+                updateUIWithTime(timeElapsedMillis)
+
                 // Sprawdź, czy pozostało mniej niż 15 minut (900 000 milisekund) do zakończenia
                 if (millisUntilFinished <= scanGracePeriodMillis && notificationCounter == 0) {
                     // Wywołaj funkcję do wysyłania powiadomienia
@@ -289,11 +271,54 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }.start()
     }
 
+    private fun saveElapsedTimeToDatabase(elapsedTimeMillis: Long) {
+        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val myApplication = application as MyApplication
+        val appDatabase = myApplication.appDatabase
+        val userId = sharedPreferences.getLong("USER_ID", -1)
+        if (userId != -1L) {
+//            val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
+            val elapsedTimeSeconds = elapsedTimeMillis / 1000
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val currentDate = Date(System.currentTimeMillis())
+            val date = dateFormat.format(currentDate)
+            val elapsedTimeHours = elapsedTimeSeconds.toDouble() / 3600.0
+
+            val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours)
+            val workHoursDao = appDatabase.workHoursDao()
+            runBlocking { workHoursDao.insertWorkHours(workHours) }
+
+            // Dodatkowo możesz zresetować dane, aby przygotować się do kolejnej sesji
+//            sharedPreferences.edit().remove("START_TIME_SECONDS").apply()
+            notificationCounter = 0
+        }
+    }
+
+    private fun updateUIWithTime(timeInMillis: Long) {
+        // Tutaj zaktualizuj elementy interfejsu użytkownika z informacją o czasie
+        // Na przykład, możesz użyć TextView do wyświetlenia pozostałego czasu
+
+        val seconds = timeInMillis / 1000
+        val minutes = seconds / 60
+        val hours = minutes / 60
+
+        val timeString = String.format("%02d:%02d:%02d", hours, minutes % 60, seconds % 60)
+
+//         Przykład użycia TextView
+         val textView = findViewById<TextView>(R.id.textView4)
+         textView.text = timeString
+
+        // Pamiętaj, żeby te zmiany UI robić w wątku głównym (użyj runOnUiThread, Handler itp.)
+    }
+
 
     // Dodaj nową funkcję do zresetowania licznika czasu po zeskanowaniu kodu
     private fun resetTimer() {
         // Zatrzymaj aktualny licznik czasu
         timer.cancel()
+
+        // Zapis aktualnego czasu do bazy danych
+        saveElapsedTimeToDatabase(timeElapsedMillis)
 
         // Zresetuj czas i uruchom nowy licznik
         timeElapsedMillis = 0
@@ -309,7 +334,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         // Zatrzymaj pracę
         showToast("Zatrzymano pracę")
         isTimerStopped = true
-        Log.d("Work", "Work stopped")
+//        Log.d("Work", "Work stopped")
     }
 
     // Dodaj nową funkcję do wznowienia pracy
@@ -376,10 +401,34 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                initQRCodeScanner();
+//                initQRCodeScanner();
             } else {
                 Toast.makeText(this, "Camera permission is required", Toast.LENGTH_LONG).show();
                 finish();
+            }
+        }
+        if (requestCode == PERMISSION_REQUEST_POST_NOTIFICATIONS) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Uprawnienia lokalizacyjne zostały udzielone
+                // Kontynuuj z uzyskiwaniem lokalizacji
+//                initializeMap()
+            } else {
+                Toast.makeText(this, "Notifications permission is required", Toast.LENGTH_LONG).show();
+                finish();
+                // Uprawnienia lokalizacyjne nie zostały udzielone
+                // Obsłuż ten przypadek (np. wyświetl komunikat o braku dostępu)
+            }
+        }
+        if (requestCode == PERMISSION_REQUEST_VIBRATE) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Uprawnienia lokalizacyjne zostały udzielone
+                // Kontynuuj z uzyskiwaniem lokalizacji
+//                initializeMap()
+            } else {
+                Toast.makeText(this, "Notifications permission is required", Toast.LENGTH_LONG).show();
+                finish();
+                // Uprawnienia lokalizacyjne nie zostały udzielone
+                // Obsłuż ten przypadek (np. wyświetl komunikat o braku dostępu)
             }
         }
     }
@@ -439,10 +488,10 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
     companion object {
         private const val REQUEST_LOCATION_PERMISSION = 1
+        private const val PERMISSION_REQUEST_POST_NOTIFICATIONS = 3
     }
 
     private fun sendNotification(context: Context, message: String) {
-        createNotificationChannel()
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Przypomnienie")
@@ -471,7 +520,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Channel Name"
+            val name = channelName
             val descriptionText = "Channel Description"
             val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(channelId, name, importance).apply {
