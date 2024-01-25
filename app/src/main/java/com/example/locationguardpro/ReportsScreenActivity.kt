@@ -29,6 +29,7 @@ class ReportsScreenActivity : AppCompatActivity() {
         backButton.setOnClickListener{
             val intent = Intent(this, HomeScreenActivity::class.java)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
 
@@ -38,6 +39,7 @@ class ReportsScreenActivity : AppCompatActivity() {
 
             // Uruchamiamy aktywność
             startActivity(intent)
+            finish()
 
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)

@@ -68,6 +68,7 @@ class RegisterScreenActivity : AppCompatActivity() {
         backButton.setOnClickListener{
             val intent = Intent(this, HomeScreenActivity::class.java)
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         }
 
@@ -75,6 +76,7 @@ class RegisterScreenActivity : AppCompatActivity() {
             val intent = Intent(this, HelpScreenActivity::class.java)
             intent.putExtra("isFromHomeScreen", 1)
             startActivity(intent)
+            finish()
             overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, android.R.anim.fade_in)
         }
 

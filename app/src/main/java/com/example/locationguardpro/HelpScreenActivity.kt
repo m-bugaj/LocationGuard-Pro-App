@@ -27,6 +27,7 @@ class HelpScreenActivity : AppCompatActivity() {
             }
 
             startActivity(intent)
+            finish()
             overridePendingTransition(R.anim.noaction, androidx.appcompat.R.anim.abc_slide_out_bottom)
         }
     }

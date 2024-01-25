@@ -95,6 +95,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 // Uruchamiamy aktywność
                 startActivity(intent)
+                finish()
 
                 // Ustawiamy animację wejścia i wyjścia
                 overridePendingTransition(anim.fade_in, anim.fade_out)
@@ -109,6 +110,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
             val intent = Intent(this, HelpScreenActivity::class.java)
             intent.putExtra("isFromHomeScreen", 1)
             startActivity(intent)
+            finish()
             overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, anim.fade_in)
         }
 
@@ -117,6 +119,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Uruchamiamy aktywność
             startActivity(intent)
+            finish()
 
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
@@ -129,6 +132,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 // Uruchamiamy aktywność
                 startActivity(intent)
+                finish()
 
                 // Ustawiamy animację wejścia i wyjścia
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
@@ -150,6 +154,7 @@ class HomeScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Uruchamiamy aktywność
             startActivity(intent)
+            finish()
 
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(R.anim.fade_in, R.anim.fade_out)

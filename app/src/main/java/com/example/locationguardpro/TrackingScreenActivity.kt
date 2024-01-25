@@ -187,6 +187,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
             // Uruchamiamy aktywność
             startActivity(intent)
+            finish()
 
             // Ustawiamy animację wejścia i wyjścia
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -195,6 +196,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         helpButton.setOnClickListener {
             val intent = Intent(this, HelpScreenActivity::class.java)
             startActivity(intent)
+            finish()
             overridePendingTransition(androidx.appcompat.R.anim.abc_slide_in_bottom, android.R.anim.fade_out)
         }
 
