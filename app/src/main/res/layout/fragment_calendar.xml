@@ -18,10 +18,11 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:id="@+id/calendarView"
-    app:compactCalendarBackgroundColor="#ffe95451"
+    app:compactCalendarBackgroundColor="#555555"
     app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
-    app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+    app:compactCalendarCurrentSelectedDayBackgroundColor="#73DCE5"
     app:compactCalendarMultiEventIndicatorColor="#fff"
     app:compactCalendarTargetHeight="250dp"
     app:compactCalendarTextColor="#fff"
-    app:compactCalendarTextSize="12sp" />
+    app:compactCalendarTextSize="12sp"
+    app:compactCalendarDisplayOtherMonthDays="true"/>
