@@ -160,21 +160,6 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val helpButton = findViewById<ImageButton>(R.id.help_button)
         val qrScannerButton = findViewById<RelativeLayout>(R.id.relativeLayout)
 
-//        val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-//        val startTimeSeconds = intent.getLongExtra("START_TIME_SECONDS", -1)
-
-//        val myApplication = application as MyApplication
-//        val appDatabase = myApplication.appDatabase
-
-
-//        // Dodaj obsługę kliknięcia dla RelativeLayout_location
-//        relativeLayoutLocation.setOnClickListener {
-//            // Ukryj RelativeLayout
-//            relativeLayout.visibility = View.GONE
-//            map_view.visibility = View.VISIBLE
-//        }
-
-
         stopTrackingButton.setOnClickListener {
             Log.d("StopButton", "Stop button clicked")
             notificationCounter = 0
@@ -278,43 +263,38 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val myApplication = application as MyApplication
         val appDatabase = myApplication.appDatabase
         val userId = sharedPreferences.getLong("USER_ID", -1)
+
         if (userId != -1L) {
-//            val endTimeSeconds = SystemClock.elapsedRealtime() / 1000
             val elapsedTimeSeconds = elapsedTimeMillis / 1000
             val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
             val currentDate = Date(System.currentTimeMillis())
             val date = dateFormat.format(currentDate)
             val elapsedTimeHours = elapsedTimeSeconds.toDouble() / 3600.0
-
             val workHours = WorkHours(userId = userId, date = date, hoursWorked = elapsedTimeHours)
             val workHoursDao = appDatabase.workHoursDao()
+
             runBlocking { workHoursDao.insertWorkHours(workHours) }
 
             // Dodatkowo możesz zresetować dane, aby przygotować się do kolejnej sesji
-//            sharedPreferences.edit().remove("START_TIME_SECONDS").apply()
             notificationCounter = 0
         }
     }
 
     private fun updateUIWithTime(timeInMillis: Long) {
-        // Tutaj zaktualizuj elementy interfejsu użytkownika z informacją o czasie
-        // Na przykład, możesz użyć TextView do wyświetlenia pozostałego czasu
+        // Aktualizacja elementów interfejsu użytkownika z informacją o czasie
+        // Na przykład, użycie TextView do wyświetlenia pozostałego czasu
 
         val seconds = timeInMillis / 1000
         val minutes = seconds / 60
         val hours = minutes / 60
-
         val timeString = String.format("%02d:%02d:%02d", hours, minutes % 60, seconds % 60)
 
 //         Przykład użycia TextView
          val textView = findViewById<TextView>(R.id.textView4)
          textView.text = timeString
-
-        // Pamiętaj, żeby te zmiany UI robić w wątku głównym (użyj runOnUiThread, Handler itp.)
     }
 
-
-    // Dodaj nową funkcję do zresetowania licznika czasu po zeskanowaniu kodu
+    // Funkcja do zresetowania licznika czasu po zeskanowaniu kodu
     private fun resetTimer() {
         // Zatrzymaj aktualny licznik czasu
         timer.cancel()
@@ -324,14 +304,12 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 
         // Zresetuj czas i uruchom nowy licznik
         timeElapsedMillis = 0
-//        isTimerStopped = false
-        Log.d("Timer", "Reset timer")
+//        Log.d("Timer", "Reset timer")
         if (!isTimerStopped) {
             startTimer()
         }
     }
 
-    // Dodaj nową funkcję do zatrzymywania pracy
     private fun stopWork() {
         // Zatrzymaj pracę
         showToast("Zatrzymano pracę")
@@ -339,14 +317,12 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
 //        Log.d("Work", "Work stopped")
     }
 
-    // Dodaj nową funkcję do wznowienia pracy
     private fun startWork() {
         // Wznow pracę
         showToast("Wznowiono pracę")
         isTimerStopped = false
-        Log.d("Work", "Work resumed")
+//        Log.d("Work", "Work resumed")
     }
-
 
     private fun initQRCodeScanner() {
         // Initialize QR code scanner here
@@ -519,7 +495,6 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = channelName
@@ -535,25 +510,9 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        handler.removeCallbacks(timerRunnable)
-//    }
-
     private fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
-
-//    fun start_tracking_button_onClick(view: View) {
-//        view.setFocusable(false);
-//        // Tworzymy Intencję, aby przenieść się na ekran TrackingScreenActivity
-//        val intent = Intent(this, HomeScreenActivity::class.java)
-//
-//        // Uruchamiamy aktywność
-//        startActivity(intent)
-//    }
-
 }
 
 data class QrCode(val content: String)
