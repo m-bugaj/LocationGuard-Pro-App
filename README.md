@@ -20,8 +20,7 @@ The Employee Control App is a Kotlin-based Android application developed in Andr
 
 ### QR Code Scanner 📷
 - Users must scan QR codes at their workplace to continue tracking time.
-- Valid scans extend the work hours countdown.
-- Incorrect or missed scans are recorded in the database.
+- Correctly scanning the qr code adds the accrued hours to the database and resets the counter.
 
 ### Notification System 🔔
 - Users receive timely notifications to remind them to scan QR codes.
