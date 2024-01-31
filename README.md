@@ -3,6 +3,62 @@
 ## Overview
 The Employee Control App is a Kotlin-based Android application developed in Android Studio. It serves as a powerful tool for managing and monitoring employee activities in their workplace. The app ensures that employees are present at their designated locations during working hours.
 
+<details open>
+  <summary>Home</summary>
+  
+  <img src="Gallery/home.png" width="400">
+</details>
+
+<details>
+  <summary>Login Screen</summary>
+  
+  <img src="Gallery/login.png" width="400">
+</details>
+
+<details>
+  <summary>Add Employee</summary>
+  
+  <img src="Gallery/add.png" width="400">
+</details>
+
+<details>
+  <summary>Tracking QR</summary>
+  
+  <img src="Gallery/trackingqr.png" width="400">
+</details>
+
+<details>
+  <summary>Scan QR Code</summary>
+  
+  <img src="Gallery/scan.png" width="400">
+</details>
+
+<details>
+  <summary>Tracking on Map</summary>
+  
+  <img src="Gallery/trackingmap.png" width="400">
+</details>
+
+<details>
+  <summary>Event Calendar</summary>
+  
+  <img src="Gallery/callendar.png" width="400">
+</details>
+
+<details>
+  <summary>Chart View</summary>
+  
+  <img src="Gallery/chart.png" width="400">
+</details>
+
+<details>
+  <summary>Help Section</summary>
+  
+  <img src="Gallery/help.png" width="400">
+</details>
+
+
+
 ## Features
 
 ### User Authentication 🚀
