@@ -1,5 +1,7 @@
 # Employee Control App 🕵️‍♂️📱
 
+[**Pobierz plik APK**](APK/LocationGuardPro.apk?raw=true)
+
 ## Overview
 The Employee Control App is a Kotlin-based Android application developed in Android Studio. It serves as a tool to monitor the location of employees in their workplace. The app ensures that employees are present at their designated locations during working hours.
 
