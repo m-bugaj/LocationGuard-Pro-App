@@ -299,8 +299,7 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         // Zatrzymaj aktualny licznik czasu
         timer.cancel()
 
-        // Zapis aktualnego czasu do bazy danych
-        saveElapsedTimeToDatabase(timeElapsedMillis)
+
 
         // Zresetuj czas i uruchom nowy licznik
         timeElapsedMillis = 0
@@ -351,6 +350,10 @@ class TrackingScreenActivity : AppCompatActivity(), OnMapReadyCallback {
         val found = qrCodes.any { it.content == scannedCode }
         if (found) {
             Toast.makeText(this, "Zeskanowano poprawny kod", Toast.LENGTH_LONG).show()
+
+            // Zapis aktualnego czasu do bazy danych
+            saveElapsedTimeToDatabase(timeElapsedMillis)
+
             notificationCounter = 0
             // Pracownik jest na właściwym miejscu
             startWork()
