@@ -28,7 +28,6 @@ class MyApplication : Application() {
         if (isFirstRun) {
             // Dodaj domyślnego użytkownika do bazy danych
             addDefaultUserToDatabase()
-
             // Ustaw flagę, że już dodano domyślnego użytkownika
             sharedPreferences.edit().putBoolean("isFirstRun", false).apply()
         }

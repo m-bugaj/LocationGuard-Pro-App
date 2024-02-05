@@ -102,7 +102,7 @@ class ChartFragment: Fragment(R.layout.fragment_chart) {
             // Ustawienie koloru etykiet osi X na biały
             val xAxis: XAxis = barChart.xAxis
             xAxis.textColor = Color.White.hashCode()
-            xLabelsList.reverse()
+//            xLabelsList.reverse()
             for (l in xLabelsList)
                 Log.d("LIST", l)
             xAxis.valueFormatter = IndexAxisValueFormatter(xLabelsList)
